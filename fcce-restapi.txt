@@ -1,0 +1,240 @@
+
+ ta2-marple-fcce1:8080... the dataset you requested is 85% loaded... it is stored under the graphname 'cs20170221'..
+
+
+
+Query Property By Type
+
+URI:  /querypropbytype/<graph>/<type>
+          Optional query:  where=value =~ /regex/   (URI encoded)
+
+Note that this entry point does not return a graph... it returns
+a list for each specified type with the values associated with that
+type.
+
+Example:
+
+    GET /querypropbytype/cadets/_filename HTTP/1.0
+
+{
+   "_filename" : [
+      "tty",
+      "libc.so.7",
+      "libutil.so.9",
+      "find",
+      "periodic",
+      ...
+   ]
+}
+
+You can specify more than one type by seperating them with commas.
+
+You can also filter the results by using 'where=value=~/regex/' as
+shown here:
+
+    GET /querypropbytype/cadets/_filename?where=value=~%2F.so.%2F HTTP/1.0
+
+{
+   "_filename" : [
+      "libc.so.7",
+      "libutil.so.9",
+      "libjail.so.1",
+      "libelf.so.2",
+      "libintl.so.8",
+      "libcrypto.so.8",
+      "libUTF8.so.4",
+      "libpcre.so.1",
+      ...
+    ]
+}
+
+
+------------------------------------------------------------------------
+
+Query Element by UUID
+
+URI:  /queryelembyuuid/<graph>/uuid[,uuid,uuid...]
+
+UUID's are ASCII hex strings with no syntactic markers (no dashes, colons,
+etc).  The UUID can either be for an entity or event.
+
+Example:
+
+    GET /queryelembyuuid/cadets/8969e6566110ee519061a82fc1ee6ec1 HTTP/1.0
+
+{
+   "events" : [
+      {
+         "timeStampNano" : "1490666266417087475",
+         "path2" : "/var/empty/",
+         "predicate2" : "8969e6566110ee519061a82fc1ee6ec1",
+         "subject" : "f0639a98135911e7a3ec44a842348b1c",
+         "type" : "EVENT_MODIFY_PROCESS",
+         "uuid" : "207afadadbe859f4880c80dc0dac7002"
+      },
+      {
+         "timeStampNano" : "1490666392602210587",
+         "path2" : "/var/empty/",
+         "predicate2" : "8969e6566110ee519061a82fc1ee6ec1",
+         "subject" : "3b99de85135a11e7a3ed44a842348b1c",
+         "type" : "EVENT_MODIFY_PROCESS",
+         "uuid" : "fd909de8005255e3bd12c16befb0c0f8"
+      },
+      ....
+   ],
+   "entities" : [
+      {
+         "subtype" : "FILE_OBJECT_DIR",
+         "permissions" : "8969",
+         "path" : "/var/empty/",
+         "type" : "FILE_OBJECT",
+         "uuid" : "8969e6566110ee519061a82fc1ee6ec1"
+      }
+   ]
+}
+
+------------------------------------------------------------------------
+
+Query Element By Property
+
+URI: /queryelembyproperty/<graph>/<proptype>/<propval>[,propval,...]
+
+Example:
+
+    GET /queryelembyproperty/cadets/type/EVENT_CONNECT
+
+{
+   "events" : [
+      {
+         "timeStampNano" : "1489100662144179718",
+         "predicate" : "bb8628a4051c11e7bc2e44a8421f8dc6",
+         "subject" : "a62fbb40051c11e7bc2e44a8421f8dc6",
+         "type" : "EVENT_CONNECT",
+         "uuid" : "fd34f45098d2520cba8af81b3463e03b"
+      },
+      {
+         "timeStampNano" : "1489100663202180488",
+         "predicate" : "bc279ea0051c11e7bc2e44a8421f8dc6",
+         "subject" : "a62fbb40051c11e7bc2e44a8421f8dc6",
+         "type" : "EVENT_CONNECT",
+         "uuid" : "89c11db289895561abe2653d97e78442"
+      },
+      {
+         "timeStampNano" : "1489100583183186289",
+         "predicate" : "8c759dde051c11e7bc2e44a8421f8dc6",
+         "subject" : "8c5d05b9051c11e7bc2e44a8421f8dc6",
+         "type" : "EVENT_CONNECT",
+         "uuid" : "eb84d0a358b85fe3bc2dce1d4c723d67"
+      },
+      ..
+   ],
+   "entities" : []
+}
+
+------------------------------------------------------------------------
+
+Query events by time
+
+URI: /queryeventsbytime/<graph>/<start>/<end>
+
+    start & end are POSIX time_t values (in seconds) for the time period.
+    You do not have to worry about slices...
+
+Example:
+
+    GET /queryeventbytime/cadets_a/1489100633/1 489 100 800 HTTP/1.0
+
+{
+   "events" : [
+      {
+         "timeStampNano" : "1489100638491320226",
+         "predicate" : "a825e9b1051c11e7bc2e44a8421f8dc6",
+         "subject" : "a62fbb40051c11e7bc2e44a8421f8dc6",
+         "type" : "EVENT_SENDTO",
+         "uuid" : "2196cc2b4eee562e9e7a740ecda910f4"
+      },
+      {
+         "timeStampNano" : "1489100605379183325",
+         "predicate" : "af2361cafc31dd5bb1fc777e5bdd4733",
+         "subject" : "99afd506051c11e7bc2e44a8421f8dc6",
+         "type" : "EVENT_MMAP",
+         "uuid" : "57cbc309fecb5aa0975e1e8b5360960c"
+      },
+      {
+         "timeStampNano" : "1489100634290180979",
+         "predicate" : "a825e9b1051c11e7bc2e44a8421f8dc6",
+         "subject" : "a62fbb40051c11e7bc2e44a8421f8dc6",
+      ...
+   ]
+}
+
+------------------------------------------------------------------------
+
+Get events by entity
+
+URI: /queryeventbyentity/<graph>/<uuid>[,<uuid>,...]
+
+Example:
+
+    GET /queryeventbyentity/cadets/a825e9b1051c11e7bc2e44a8421f8dc6 HTTP/1.0
+
+{
+   "events" : [
+      {
+         "timeStampNano" : "1489100635974482074",
+         "predicate" : "a825e9b1051c11e7bc2e44a8421f8dc6",
+         "subject" : "a62fbb40051c11e7bc2e44a8421f8dc6",
+         "type" : "EVENT_SENDTO",
+         "uuid" : "5b36c07c35b55646aef0a058331eeba2"
+      },
+      {
+         "timeStampNano" : "1489100640453189712",
+         "predicate" : "a825e9b1051c11e7bc2e44a8421f8dc6",
+         "subject" : "a62fbb40051c11e7bc2e44a8421f8dc6",
+         "type" : "EVENT_SENDTO",
+         "uuid" : "6cecc2c892cc5a4299f92c5257779fd9"
+      },
+      ...
+}
+
+
+------------------------------------------------------------------------
+
+Subscribe to the live incoming event channel:
+
+URI:   /sub/cdmjoin?select=<fields>&where=<expression>
+
+The fields which can be selected using 'select' are:
+
+        Graph     - name of the graph
+        Type      - Event Type (EVENT_OPEN, etc; but see notes!!!)
+        UUID      - Event UUID
+        Subject   - Subject UUID
+        Predicate - Predicate UUID
+        Path      - Path associated with the predicate
+        TimeStamp - Nanosecond time stamp
+        %timestamp- POSIX time_t time stamp (seconds)
+        %all      - Select all the fields
+
+!!!NOTE!!!: For events which contain a Predicate2 and Predicate2Path, the
+    event will come across as two separate records.  The Event Type will
+    have _A and _B appended to it.  The Predicate2 and Predicate2Path will
+    be stored in the _B version of the record.  For example, EVENT_RENAME
+    will come across as two records... EVENT_RENAME_A and EVENT_RENAME_B.
+
+The 'where' clause can be used to filter the data and you will almost
+certainly want to filter on 'graph'. 
+
+The data is not a graph object.  Each line is a JSON object with the
+selected fields.  The data stream should never terminate.
+
+Example:
+
+    GET /sub/cdmjoin?where=graph==%22cadets%22&select=%25all HTTP/1.0
+
+{"Graph":"cadets", "Type":"EVENT_OPEN", "UUID":"a825e9b1051c11e7bc2e44a8421f8dc6", "Subject":"a62fbb40051c11e7bc2e44a8421f8dc6", "Predicate":"2196cc2b4eee562e9e7a740ecda910f4", "Path":"/etc/passwd", "TimeStamp":"1489100636825180978"}
+
+
+
+
+

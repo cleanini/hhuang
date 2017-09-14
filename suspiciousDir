@@ -1,0 +1,67 @@
+#000000000000000000000000000003e9
+#00000000000000000000000000000fa1
+#00000000000000000000000000001195
+#0000000000000000000000000000157d
+#00000000000000000000000000001b59
+#00000000000000000000000000003a99
+#000000000000000000000000000057e5
+#00000000000000000000000000007531
+
+
+#/data/local/tmp/MainActivity-debug.apk
+#/data/local/tmp/GatherProject-debug.apk
+/data/local/tmp/
+
+#/data/app/vmdl591819199.tmp/base.apk
+/storage/emulated
+/proc
+
+
+#/data/local/tmp/GatherProject-debug.apk
+#/data/app/vmdl265568233.tmp/base.apk count the number of newly install apks, against the suspicious ones...
+
+/data/data/com.android.phone/files
+
+
+#/data/data
+
+#/data/app/vmdl591819199.tmp/base.apk
+#/sys/devices/system/cpu/cpu0/cpufreq/stats/time_in_state
+#/sys/kernel/debug/wakeup_sources
+#/system/etc/apns-conf.xml
+#/system/framework/framework-res.apk
+#/data/system/
+#/data/app 
+#/system/app 
+#/system/lib
+#/system/priv 
+#/system/media
+
+/system/lib/libwifi-service.so
+/system/lib/libsoundpool.so
+/system/lib/libjni_latinime.so
+/system/lib/libnfc_nci_jni.so
+/system/lib/libsoundpool.so
+/system/lib/libbluetooth_jni.so
+
+/storage/emulated/0/Android
+/storage/emulated/0/Android/data
+/storage/emulated/0/Android/data/com.TA5.android.GatherApp/files/gather.txt
+
+
+FILE_OBJECT_DIR {path=/data/data/edu.mit.clearscope.basicops/files/dir/temp}
+FILE_OBJECT_DIR {path=/data/data/edu.mit.clearscope.basicops/files/dir/temp}
+FILE_OBJECT_FILE {path=/data/app/edu.mit.clearscope.basicops-1/base.apk}
+
+
+# whitelist
+/storage/emulated/0/Music
+/storage/emulated/0/Podcasts
+/storage/emulated/0/Ringtones
+/storage/emulated/0/Alarms
+/storage/emulated/0/Notifications
+/storage/emulated/0/Pictures
+/storage/emulated/0/Movies
+/storage/emulated/0/Download
+/storage/emulated/0/DCIM
+
