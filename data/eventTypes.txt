@@ -1,0 +1,45 @@
+EVENT_NOMATCH,		      // not match anything
+EVENT_ACCEPT,                 // accept a connection on an object
+EVENT_BIND,                   // bind to a network endpoint object
+EVENT_BLIND,                  // blind event for a black boxes that are not instrumented
+EVENT_CHANGE_PRINCIPAL,       // change the principal associated with the process
+EVENT_CHECK_FILE_ATTRIBUTES,  // check the file attributes such as permissions
+EVENT_CLONE,                  // clone a subject
+EVENT_CLOSE,                  // close an object
+EVENT_CONNECT,                // connect to an object
+EVENT_CREATE_OBJECT,          // create an object
+EVENT_CREATE_THREAD,          // create a thread subject
+EVENT_DUP,                    // duplicate a file descriptor
+EVENT_EXECUTE,                // execute an object
+EVENT_FNCTL,                  // manipulate file descriptor
+EVENT_FORK,                   // fork a process subject
+EVENT_LINK,                   // link an object to a new name
+EVENT_LSEEK,                  // reposition read/write file offset
+EVENT_MMAP,                   // memory map an object
+EVENT_MODIFY_FILE_ATTRIBUTES, // modify the attributes of a file object
+EVENT_MODIFY_PROCESS,         // for events that modify the process environment (eg, umask, chdir)
+EVENT_MPROTECT,               // change permissions of a memory object
+EVENT_OPEN,                   // open an object
+EVENT_OTHER,                  // some other event not enumerated in CDM
+EVENT_READ,                   // read from an object (file or socket)
+EVENT_RECVFROM,               // receive message from a socket
+EVENT_RECVMSG,                // receive message from a socket
+EVENT_RENAME,                 // rename an object
+EVENT_SENDTO,                 // send through socket
+EVENT_SENDMSG,                // send message through socket
+EVENT_SHM,                    // share memory between processes
+EVENT_SIGNAL,                 // signal another subject
+EVENT_TRUNCATE,               // truncate an object
+EVENT_UNIT,                   // create a BEEP unit
+EVENT_UNLINK,                 // unlink a name from an object
+EVENT_UPDATE,                 // update an object
+EVENT_WAIT,                   // wait on another subject
+EVENT_WRITE,                  // write to an object (file or socket)
+EVENT_EXIT,                   // process exit
+EVENT_LOADLIBRARY,            // dynamically loading a library
+EVENT_BOOT,                   // indicates the sytem has booted
+EVENT_LOGCLEAR,               // indicates a system log has been cleared
+EVENT_MOUNT,                  // indicates the mounting of a device
+EVENT_STARTSERVICE,           // indicates a service has started
+EVENT_LOGIN,                  // a subject has logged in
+EVENT_LOGOUT                  // a subject has logged out
