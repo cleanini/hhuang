@@ -79,20 +79,24 @@ def test(args):
 
             x_e, y_e, x_p1, y_p1, x_p2, y_p2= data_loader.next_batch()
             #print(x_e, y_e, x_p1, y_p1)
-            argpara = zip(x_e, x_p1, x_p2) # get a sequence of (e, p1, p2)            
+            argpara = zip(x_e, x_p1, x_p2, y_e, y_p1, y_p2) # get a sequence of (e, p1, p2)            
+            #tgtargpara = zip(y_e, y_p1, y_p2) # get a sequence of (e, p1, p2)            
             #print (argpara)
             predicated_list = ""
             start = time.time()
 
             print (argpara)
-            for (elist, plist, p2list) in argpara:                                
-                for e, p1, p2 in zip(elist, plist, p2list):
+            for (elist, p1list, p2list, elistNext, p1listNext, p2listNext) in argpara:                                
+                for e, p1, p2, et, p1t, p2t in zip(elist, p1list, p2list, elistNext, p1listNext, p2listNext):
                     state = sess.run(model.cell.zero_state(1, tf.float32))
 
                     if  not data_loader.event_vocab_rev.get(e) in predicated_list:
-                        print ("originate:" + data_loader.event_vocab_rev.get(e))# + ' ' + data_loader.para_vocab_rev.get(p1) + ' ' + data_loader.para_vocab_rev.get(p2))
+                        #print ("observed:" + data_loader.event_vocab_rev.get(e))# + ' ' + data_loader.para_vocab_rev.get(p1) + ' ' + data_loader.para_vocab_rev.get(p2))
+                        #print (e) 
+                        print ("observed:" + data_loader.event_vocab_rev.get(e))
                         print (predicated_list)
                     
+                    print("========  ") 
                     #print (e, p1, p2)
                     
                     x = np.zeros((1, 1))
@@ -111,19 +115,33 @@ def test(args):
                     #maxval = tf.reduce_max(probs, 1, keep_dims=False)
                     
                     #eventval = np.argmax(probs[0])
-                    sortedevent = np.argsort(probs[0])
+                    sortedevent = np.argsort(probs[0])[::-1]
+                    #desentsortedevent = sortedevent.reverse()
                     #print(sortedevent[len(sortedevent)-1], probs[0])
                     #print (eventval)
                     argval1 = np.argmax(probs1[0])
                     argval2 = np.argmax(probs2[0])
-                    predicated_list = "predicate:[" + data_loader.event_vocab_rev.get(sortedevent[len(sortedevent)-1]) + ' ' + data_loader.event_vocab_rev.get(sortedevent[len(sortedevent)-2]) + ' ' +data_loader.event_vocab_rev.get(sortedevent[len(sortedevent)-3])+ '] ' + data_loader.para_vocab_rev.get(argval1) + ' ' +  data_loader.para_vocab_rev.get(argval2)
+                    predicated_list = "predicate:["
+
+                    for x in range(len(sortedevent)) :
+                        if sortedevent[x]==et:
+                          a = x
+                    print (a+1)
+
+
+                    for i in range(3):
+                        #print(i)
+                                              
+                        predicated_list += data_loader.event_vocab_rev.get(sortedevent[i]) + ' '
+                    predicated_list += '] ' + data_loader.para_vocab_rev.get(argval1) + ' ' +  data_loader.para_vocab_rev.get(argval2)
+                    print(sortedevent) 
                     
                     #e = eventval.eval()                    
                     #arg1 = argval1.eval()
                     #arg2 = argval2.eval()
 
                     #print(data_loader.event_vocab_rev.get(e[0]), data_loader.event_vocab_rev.get(arg1[0]), data_loader.event_vocab_rev.get(arg2[0]))
-                    print("========")
+                    
             end = time.time()
             print("time/batch = {:.3f}".format(end - start))
                             
