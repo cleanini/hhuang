@@ -751,28 +751,171 @@ public class KafkaAnalyzer {
 		case "Subject":
 			Subject subject = (Subject) datum;
 			
-			UUID subUUID = subject.getUuid();			
+			UUID subUUID = subject.getUuid();
+			
 			String subjDetailStr = Util.convertPrintCUUID(subUUID, subject, className, false);
-			String subHexUUID = subjDetailStr.split("::")[1];
-			//String appname = subject.getCmdLine().toString();
+			String parentUUID = "";
+			if (subject.getParentSubject()!=null)
+				parentUUID = Util.getHexUUIDStr(subject.getParentSubject());
+			String [] fields = subjDetailStr.split("::");
+			String subHexUUID = fields[1];
+			//String appname = subject.getCmdLine().toString();			
+		
+			//if (subject.getType().toString() == "SUBJECT_PROCESS")				
+			//System.out.println(subHexUUID + ' ' + fields[2]);
 			
-			if (subject.getType().toString() == "SUBJECT_PROCESS")
-				System.out.println("Subject: " + " " + subHexUUID + subject.toString());
-			
-			
-			HashMap<CharSequence, CharSequence> props = (HashMap) subject.getProperties();
-			/*
+			System.out.println(subjDetailStr);
+			String propString = "";
+			HashMap<CharSequence, CharSequence> props = (HashMap) subject.getProperties();		
 			for (CharSequence i : props.keySet()) {
-				if (i.toString().contains("name")){
-					if (props.get(i)!=null && props.get(i).toString().contains("firefox")){
-						fireFoxUUID.add(subHexUUID);
+				if (i.toString().contains("name") || i.toString().contains("cwd")){
+					if (props.get(i)!=null ){
+						//fireFoxUUID.add(subHexUUID);
+						propString += i.toString() + props.get(i).toString();
 					}						
-				}
-					
-			}*/
+				}									
+			}
+			System.out.println(propString);
 			
 			break;
 
+		
+			
+			
+		case "Event":
+			Event enode = new Event();
+			enode = (Event) datum;
+			UUID eUUID = enode.getUuid();
+			boolean addSuspEvent = false;
+
+			
+			
+			String euuidHex = Util.getHexUUIDStr(eUUID);
+
+			long timestamp = enode.getTimestampNanos();
+			if (currTimeStamp < timestamp)
+				currTimeStamp = timestamp;
+
+			UUID sUUID = enode.getSubject();
+			String suuidHex = Util.getHexUUIDStr(sUUID);
+			
+			String predObjectHex = "predObject;;";
+			
+			String predType = "";
+			if (enode.getPredicateObject() != null ) {
+					predObjectHex += Util.getHexUUIDStr(enode.getPredicateObject()) + ";;";
+					//predType = "hasUUID1";
+					String type = "";
+					String pred1 = "";
+					if (enode.getPredicateObjectPath() != null){//enode.getPredicateObjectPath() != "<unknown>"
+						pred1 = enode.getPredicateObjectPath().toString();
+						predObjectHex = predObjectHex + pred1 + ";;";
+						type = encodePredicate(enode, pred1);						
+					} 
+					//System.out.println("type: " + type);
+					//System.out.println("pred1: " + pred1);
+					if (type =="") {
+						if (pred1.contains("/")) {
+							predType += ";nomatch_t1"; 					
+							System.out.println(pred1);
+						} else 		
+							predType += ";notype_t1";
+					} else {	
+						predType += ";" + type;
+					}
+					
+					
+			
+					
+					//predType += ";" + type + "1";
+			} else {
+				predType = "noUUID1";
+			}		 			
+			
+			
+			if (enode.getPredicateObject2() != null ) {
+				predObjectHex += Util.getHexUUIDStr(enode.getPredicateObject2()) + ";;";
+				//predType += ";hasUUID2";
+				String type = "";
+				String pred2 = "";
+				if (enode.getPredicateObject2Path() != null && enode.getPredicateObject2Path() != "<unknown>"){
+					pred2 = enode.getPredicateObject2Path().toString();
+					predObjectHex = predObjectHex + pred2 + ";;";
+					type = encodePredicate(enode, pred2);					
+				}
+				if (type =="") {
+					if (pred2.contains("/")) {
+						predType += ";nomatch_t2";
+					} else 		
+						predType += ";notype_t2";
+				} else {	
+					predType += ";" + type;
+				}
+			} else {
+				predType += ";noUUID2";
+			}	
+					
+			/*
+			boolean matched = false;
+			
+			if (enode.getPredicateObject() != null) {
+				predObjectHex += Util.getHexUUIDStr(enode.getPredicateObject()) + ";;";				
+				if (enode.getPredicateObjectPath() != null) {
+					String pred1 = enode.getPredicateObjectPath().toString();
+					predObjectHex = predObjectHex + pred1 + ";;";
+					String[] subs = pred1.split("/");					
+					if (subs.length > 0 && this.filePolicyList.containsKey(subs[1])) {
+						//System.out.println(subs[1]);
+						for (String i : this.filePolicyList.get(subs[1])) {						
+							String[] regObjects = i.split(":;:");						
+							if (pred1.matches(regObjects[0])){
+								matched = true;
+								System.out.println(pred1 + ' ' + regObjects[regObjects.length-1]);
+								predType += regObjects[regObjects.length-1];
+								break;							
+							}
+						}
+						if (!matched){
+							System.out.println(pred1 + " NOMATCH");
+						}
+					}
+				}
+			}*/
+						
+			String eventType = enode.getType().toString();
+			String apicall = "";
+			if (enode.get("name")!=null)
+				apicall = enode.get("name").toString();
+			Long eventTime = enode.getTimestampNanos();
+			Long eSeq = enode.getSequence();
+			Integer eTid = enode.getThreadId();
+			CharSequence ppt = enode.getProgramPoint();
+
+
+			//System.out.println(eventType + " " + predType);
+			
+			String assEventStr = Util.assemblyEventStr(predObjectHex, suuidHex, euuidHex, apicall, eventType, eventTime,
+					eSeq, eTid, ppt);
+		
+			if (!eventType.contains("EVENT_UNIT")){//eventType.contains("EVENT_FORK") || eventType.contains("EVENT_EXECUTE") || eventType.contains("EVENT_CLONE")) {
+				String eventTrace = eventTime + "," + eventType + ";" + predType + "," + suuidHex + "," + eTid + "," + eSeq;
+				//System.out.println();// + "," + predObjectHex);
+				
+			}
+
+			ArrayList<Value> paraList = new ArrayList<Value>();
+			if (enode.getParameters() != null) {
+				paraList.addAll(enode.getParameters());
+			}
+			
+			/*
+			if (fireFoxUUID.contains(suuidHex))
+				System.out.println("FireFoxEventObject: "+assEventStr);// + " " + enode.toString());
+			else 
+				System.out.println("EventObject: "+assEventStr);// + " " + enode.toString());
+			 */
+			//String eventParaStr = Util.printAllEventParamDetails(paraList, suuidHex);
+			break;
 		case "ProvenanceTagNode":
 			ProvenanceTagNode provenanceTagNode = (ProvenanceTagNode) datum;
 			UUID targetTagId = provenanceTagNode.getTagId();
@@ -857,132 +1000,13 @@ public class KafkaAnalyzer {
 			break;
 			
 			
-		case "Event":
-			Event enode = new Event();
-			enode = (Event) datum;
-			UUID eUUID = enode.getUuid();
-			boolean addSuspEvent = false;
-
-			
-			
-			String euuidHex = Util.getHexUUIDStr(eUUID);
-
-			long timestamp = enode.getTimestampNanos();
-			if (currTimeStamp < timestamp)
-				currTimeStamp = timestamp;
-
-			UUID sUUID = enode.getSubject();
-			String suuidHex = Util.getHexUUIDStr(sUUID);
-
-			String predObjectHex = "predObject;;";
-			
-			String predType = "";
-			if (enode.getPredicateObject() != null ) {
-					predObjectHex += Util.getHexUUIDStr(enode.getPredicateObject()) + ";;";
-					//predType = "hasUUID1";
-					String type = "";
-					String pred1 = "";
-					if (enode.getPredicateObjectPath() != null && enode.getPredicateObjectPath() != "<unknown>"){
-						pred1 = enode.getPredicateObjectPath().toString();
-						predObjectHex = predObjectHex + pred1 + ";;";
-						type = encodePredicate(enode, pred1);						
-					} 
-					if (type =="") {
-						predType += ";notype_t1";
-					}
-					
-					predType += ";" + type + "1";
-			} else {
-				predType = "noUUID1";
-			}		 			
-			
-			
-			if (enode.getPredicateObject2() != null ) {
-				predObjectHex += Util.getHexUUIDStr(enode.getPredicateObject2()) + ";;";
-				//predType += ";hasUUID2";
-				String type = "";
-				String pred2 = "";
-				if (enode.getPredicateObject2Path() != null && enode.getPredicateObject2Path() != "<unknown>"){
-					pred2 = enode.getPredicateObject2Path().toString();
-					predObjectHex = predObjectHex + pred2 + ";;";
-					type = encodePredicate(enode, pred2);					
-				}
-				if (type=="" && pred2.length()>0) {
-					predType += ";nomatch_t2";
-				} else 		
-					predType += ";notype_t2";
-				
-				predType += ";" + type + "2";
-			} else {
-				predType += ";noUUID2";
-			}	
-					
-			/*
-			boolean matched = false;
-			
-			if (enode.getPredicateObject() != null) {
-				predObjectHex += Util.getHexUUIDStr(enode.getPredicateObject()) + ";;";				
-				if (enode.getPredicateObjectPath() != null) {
-					String pred1 = enode.getPredicateObjectPath().toString();
-					predObjectHex = predObjectHex + pred1 + ";;";
-					String[] subs = pred1.split("/");					
-					if (subs.length > 0 && this.filePolicyList.containsKey(subs[1])) {
-						//System.out.println(subs[1]);
-						for (String i : this.filePolicyList.get(subs[1])) {						
-							String[] regObjects = i.split(":;:");						
-							if (pred1.matches(regObjects[0])){
-								matched = true;
-								System.out.println(pred1 + ' ' + regObjects[regObjects.length-1]);
-								predType += regObjects[regObjects.length-1];
-								break;							
-							}
-						}
-						if (!matched){
-							System.out.println(pred1 + " NOMATCH");
-						}
-					}
-				}
-			}*/
-						
-			String eventType = enode.getType().toString();
-			String apicall = "";
-			if (enode.get("name")!=null)
-				apicall = enode.get("name").toString();
-			Long eventTime = enode.getTimestampNanos();
-			Long eSeq = enode.getSequence();
-			Integer eTid = enode.getThreadId();
-			CharSequence ppt = enode.getProgramPoint();
-
-
-			//System.out.println(eventType + " " + predType);
-			
-			String assEventStr = Util.assemblyEventStr(predObjectHex, suuidHex, euuidHex, apicall, eventType, eventTime,
-					eSeq, eTid, ppt);
-		
-			if (!eventType.contains("EVENT_UNIT")){//eventType.contains("EVENT_FORK") || eventType.contains("EVENT_EXECUTE") || eventType.contains("EVENT_CLONE")) {
-				System.out.println(eventTime + ", " + eventType + ";" + predType + ", " + suuidHex + ", " + eTid + ", " + eSeq + ", " + predObjectHex);				
-			}
-
-			ArrayList<Value> paraList = new ArrayList<Value>();
-			if (enode.getParameters() != null) {
-				paraList.addAll(enode.getParameters());
-			}
-			
-			/*
-			if (fireFoxUUID.contains(suuidHex))
-				System.out.println("FireFoxEventObject: "+assEventStr);// + " " + enode.toString());
-			else 
-				System.out.println("EventObject: "+assEventStr);// + " " + enode.toString());
-			 */
-			//String eventParaStr = Util.printAllEventParamDetails(paraList, suuidHex);
-			break;
-
 		default:
 			System.out.println("CaseType Not Processed " +
 			  datum.getClass().toString());
 			break; // com.bbn.tc.schema.avro.Principal
 					// EDGE_SUBJECT_HASLOCALPRINCIPAL
 		}
+		
 	}
 	
 
