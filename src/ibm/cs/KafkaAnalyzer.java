@@ -252,6 +252,14 @@ public class KafkaAnalyzer {
 	public static DirectedGraph<String, DefaultEdge> provGraph = new DefaultDirectedGraph<String, DefaultEdge>(
 			DefaultEdge.class);
 
+	public static DirectedGraph<String, DefaultEdge> forkGraph = new DefaultDirectedGraph<String, DefaultEdge>(
+			DefaultEdge.class);
+	public static DirectedGraph<String, DefaultEdge> forkGraphUUID = new DefaultDirectedGraph<String, DefaultEdge>(
+			DefaultEdge.class);
+	private HashMap<String, String> cid2UUIDMap = new HashMap<String, String>();
+
+
+	
 	DirectedGraph<String, Util.RelationshipEdge> scenarioGraph = new DirectedMultigraph<String, Util.RelationshipEdge>(
 			new ClassBasedEdgeFactory<String, Util.RelationshipEdge>(Util.RelationshipEdge.class));
 
@@ -750,32 +758,102 @@ public class KafkaAnalyzer {
 			break;
 		case "Subject":
 			Subject subject = (Subject) datum;
-			
+			String subjectStore = "";
 			UUID subUUID = subject.getUuid();
-			
+			String subHexUUID = Util.getHexUUIDStr(subUUID);
+
 			String subjDetailStr = Util.convertPrintCUUID(subUUID, subject, className, false);
 			String parentUUID = "";
 			if (subject.getParentSubject()!=null)
 				parentUUID = Util.getHexUUIDStr(subject.getParentSubject());
-			String [] fields = subjDetailStr.split("::");
-			String subHexUUID = fields[1];
+			else {
+				parentUUID = "null";
+			}
+			
+			subjectStore+= ","  + parentUUID;
+		
+			//String [] fields = subjDetailStr.split("::");
+			
+			if (subject.getCmdLine()!=null);
+				subjectStore+= ","  + subject.getCmdLine();
+			
+			//String subHexUUID = fields[1];
 			//String appname = subject.getCmdLine().toString();			
 		
 			//if (subject.getType().toString() == "SUBJECT_PROCESS")				
-			//System.out.println(subHexUUID + ' ' + fields[2]);
+			//System.out.println(subjDetailStr);
 			
-			System.out.println(subjDetailStr);
-			String propString = "";
+			//System.out.println(subjDetailStr);
+			
+			String cidStr = subject.getCid().toString();
+			String ppidStr = "";
+			String propString = cidStr;
 			HashMap<CharSequence, CharSequence> props = (HashMap) subject.getProperties();		
 			for (CharSequence i : props.keySet()) {
-				if (i.toString().contains("name") || i.toString().contains("cwd")){
+				String item = i.toString();
+				if (item.contains("name") || item.contains("cwd") || item.contains("ppid")){
+					if (item.contains("ppid")) ppidStr = props.get(i).toString();
 					if (props.get(i)!=null ){
 						//fireFoxUUID.add(subHexUUID);
-						propString += i.toString() + props.get(i).toString();
+						propString += "," + props.get(i).toString();
 					}						
 				}									
 			}
-			System.out.println(propString);
+			//System.out.println(propString);
+			subjectStore+= ","  + propString;
+			//System.out.println(subjectStore);
+
+			this.allSubjectStrs.put(subHexUUID, subjectStore);
+			
+			if (!this.cid2UUIDMap.containsKey(cidStr))
+				this.cid2UUIDMap.put(cidStr, subHexUUID);
+			else {
+				if (this.cid2UUIDMap.get(cidStr)!=subHexUUID) {
+					System.out.println(subHexUUID +' '+ this.cid2UUIDMap.get(cidStr));
+					System.out.println(this.allSubjectStrs.get(subHexUUID));
+					System.out.println(this.allSubjectStrs.get(this.cid2UUIDMap.get(cidStr)));
+				}
+			}
+			
+			if (!this.forkGraph.containsVertex(cidStr))
+				this.forkGraph.addVertex(cidStr);			
+			if (!this.forkGraph.containsVertex(ppidStr))
+				this.forkGraph.addVertex(ppidStr);
+			if (!this.forkGraph.containsEdge(cidStr, ppidStr))
+				this.forkGraph.addEdge(cidStr, ppidStr);
+
+			if (!this.forkGraphUUID.containsVertex(subHexUUID))
+				this.forkGraphUUID.addVertex(subHexUUID);			
+			if (!this.forkGraphUUID.containsVertex(parentUUID))
+				this.forkGraphUUID.addVertex(parentUUID);
+			if (!this.forkGraphUUID.containsEdge(subHexUUID, parentUUID))
+				this.forkGraphUUID.addEdge(subHexUUID, parentUUID);
+			
+			
+			
+			
+			/*
+			if (provenanceTagNode.getPrevTagId() != null) { // Sequence
+				UUID srcTagId = provenanceTagNode.getPrevTagId();
+				String srcTagIDhex = Util.getHexUUIDStr(srcTagId);
+				if (!this.provGraph.containsVertex(srcTagIDhex))
+					this.provGraph.addVertex(srcTagIDhex);
+				if (!this.provGraph.containsEdge(targetTagIdHex, srcTagIDhex))
+					provGraph.addEdge(srcTagIDhex, targetTagIdHex);
+			}
+
+			List<UUID> tags = provenanceTagNode.getTagIds(); // all TAG_OP_UNION
+			if (tags != null) {
+				// System.out.println(pDetailStr);
+				for (UUID srcTagId : tags) {
+					String cSrcTagIdHex = Util.getHexUUIDStr(srcTagId);
+					if (!this.provGraph.containsVertex(cSrcTagIdHex))
+						this.provGraph.addVertex(cSrcTagIdHex);
+					if (!this.provGraph.containsEdge(targetTagIdHex, cSrcTagIdHex))
+						provGraph.addEdge(cSrcTagIdHex, targetTagIdHex);
+				}
+			}*/
+			
 			
 			break;
 
