@@ -248,6 +248,14 @@ public class KafkaAnalyzer {
 	public static PrintWriter eventAllWriter = null;
 	public static PrintWriter subAllWriter = null;
 
+	
+	public static PrintWriter eventWriter = null;
+	public static PrintWriter subWriter = null;
+	public static PrintWriter subUUIDDetailWriter = null;
+	public static PrintWriter cidGraphWriter = null;
+
+
+	
 	public static Object mutexProvGraph = new Object();
 	public static DirectedGraph<String, DefaultEdge> provGraph = new DefaultDirectedGraph<String, DefaultEdge>(
 			DefaultEdge.class);
@@ -754,7 +762,7 @@ public class KafkaAnalyzer {
 		
 		switch (className) {
 		case "ENDOFMESSAGES":
-			System.out.println("THE END..................");
+			//System.out.println("THE END..................");
 			break;
 		case "Subject":
 			Subject subject = (Subject) datum;
@@ -768,23 +776,14 @@ public class KafkaAnalyzer {
 				parentUUID = Util.getHexUUIDStr(subject.getParentSubject());
 			else {
 				parentUUID = "null";
-			}
-			
+			}		
 			subjectStore+= ","  + parentUUID;
 		
 			//String [] fields = subjDetailStr.split("::");
 			
 			if (subject.getCmdLine()!=null);
 				subjectStore+= ","  + subject.getCmdLine();
-			
-			//String subHexUUID = fields[1];
-			//String appname = subject.getCmdLine().toString();			
 		
-			//if (subject.getType().toString() == "SUBJECT_PROCESS")				
-			//System.out.println(subjDetailStr);
-			
-			//System.out.println(subjDetailStr);
-			
 			String cidStr = subject.getCid().toString();
 			String ppidStr = "";
 			String propString = cidStr;
@@ -799,6 +798,15 @@ public class KafkaAnalyzer {
 					}						
 				}									
 			}
+			
+			//String subHexUUID = fields[1];
+			//String appname = subject.getCmdLine().toString();			
+		
+			//if (subject.getType().toString() == "SUBJECT_PROCESS")				
+			//System.out.println(subjDetailStr);
+			
+			//System.out.println(subjDetailStr);
+		
 			//System.out.println(propString);
 			subjectStore+= ","  + propString;
 			//System.out.println(subjectStore);
@@ -809,11 +817,16 @@ public class KafkaAnalyzer {
 				this.cid2UUIDMap.put(cidStr, subHexUUID);
 			else {
 				if (this.cid2UUIDMap.get(cidStr)!=subHexUUID) {
+					//System.out.println(subHexUUID +' '+ this.cid2UUIDMap.get(cidStr));
+					this.cid2UUIDMap.put(cidStr, this.cid2UUIDMap.get(cidStr) + ';' + subHexUUID);
+					/*
 					System.out.println(subHexUUID +' '+ this.cid2UUIDMap.get(cidStr));
-					System.out.println(this.allSubjectStrs.get(subHexUUID));
+					System.out.println(this.allSubjectStrs.get(subHexUUID));	
 					System.out.println(this.allSubjectStrs.get(this.cid2UUIDMap.get(cidStr)));
+					*/
 				}
 			}
+		
 			
 			if (!this.forkGraph.containsVertex(cidStr))
 				this.forkGraph.addVertex(cidStr);			
@@ -821,14 +834,15 @@ public class KafkaAnalyzer {
 				this.forkGraph.addVertex(ppidStr);
 			if (!this.forkGraph.containsEdge(cidStr, ppidStr))
 				this.forkGraph.addEdge(cidStr, ppidStr);
-
+			 
+			/*
 			if (!this.forkGraphUUID.containsVertex(subHexUUID))
 				this.forkGraphUUID.addVertex(subHexUUID);			
 			if (!this.forkGraphUUID.containsVertex(parentUUID))
 				this.forkGraphUUID.addVertex(parentUUID);
 			if (!this.forkGraphUUID.containsEdge(subHexUUID, parentUUID))
 				this.forkGraphUUID.addEdge(subHexUUID, parentUUID);
-			
+			*/
 			
 			
 			
@@ -865,8 +879,6 @@ public class KafkaAnalyzer {
 			enode = (Event) datum;
 			UUID eUUID = enode.getUuid();
 			boolean addSuspEvent = false;
-
-			
 			
 			String euuidHex = Util.getHexUUIDStr(eUUID);
 
@@ -932,7 +944,9 @@ public class KafkaAnalyzer {
 			} else {
 				predType += ";noUUID2";
 			}	
-					
+			
+			
+			
 			/*
 			boolean matched = false;
 			
@@ -976,15 +990,28 @@ public class KafkaAnalyzer {
 					eSeq, eTid, ppt);
 		
 			if (!eventType.contains("EVENT_UNIT")){//eventType.contains("EVENT_FORK") || eventType.contains("EVENT_EXECUTE") || eventType.contains("EVENT_CLONE")) {
-				String eventTrace = eventTime + "," + eventType + ";" + predType + "," + suuidHex + "," + eTid + "," + eSeq;
-				//System.out.println();// + "," + predObjectHex);
-				
+				String eventTrace = eventTime.toString().substring(0, 13) + "," + eventType + ";" + predType + "," + suuidHex + "," + suuidHex.substring(suuidHex.length()-6, suuidHex.length()) + "," + eTid + "," + eSeq;
+				this.eventWriter.println(eventTrace);// + "," + predObjectHex);				
 			}
 
 			ArrayList<Value> paraList = new ArrayList<Value>();
 			if (enode.getParameters() != null) {
 				paraList.addAll(enode.getParameters());
 			}
+			
+			//String tid = enode.getThreadId().toString();
+			/*
+			if (this.cid2UUIDMap.containsKey(tid)) {
+				if (this.cid2UUIDMap.get(tid).contains(suuidHex))
+					System.out.println(enode.getTimestampNanos());
+				else 
+					System.out.println("missing suuidHex");
+			}
+			else {
+				System.out.println("missing cid" + enode.toString());
+			} */
+			
+			
 			
 			/*
 			if (fireFoxUUID.contains(suuidHex))
@@ -1719,11 +1746,24 @@ public class KafkaAnalyzer {
 				File report_dir = new File(this.report_dir_path);
 				report_dir.mkdirs();
 				File suspEventFile = new File(this.report_dir_path + "/suspEventTrac.txt");
-
 				File suspSubFile = new File(this.report_dir_path + "/suspSubjTrac.txt");
+				
+				File eventFile = new File(this.report_dir_path + "/EventTrac.txt");
+				File subFile = new File(this.report_dir_path + "/SubjTrac.txt");
+				File subUUIDFile = new File(this.report_dir_path + "/SubjUUIDDetailTrac.txt");
+				File cidGraphFile = new File(this.report_dir_path + "/cidGraph.txt");
+
+				
 				try {
 					this.eventAllWriter = new PrintWriter(new FileOutputStream(suspEventFile.getAbsolutePath()));
 					this.subAllWriter = new PrintWriter(new FileOutputStream(suspSubFile.getAbsolutePath()));
+					
+					this.subWriter = new PrintWriter(new FileOutputStream(subFile.getAbsolutePath()));
+					this.eventWriter = new PrintWriter(new FileOutputStream(eventFile.getAbsolutePath()));
+					this.subUUIDDetailWriter = new PrintWriter(new FileOutputStream(subUUIDFile.getAbsolutePath()));
+					this.cidGraphWriter = new PrintWriter(new FileOutputStream(cidGraphFile.getAbsolutePath()));
+
+
 
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -2001,6 +2041,36 @@ public class KafkaAnalyzer {
 					transaction = dataFileReader.next(transaction);
 					processDatum17Dump(transaction.getDatum());
 				}
+
+				
+
+				for (Map.Entry<String, String> cidMap : this.cid2UUIDMap.entrySet()) {
+					this.subWriter.println(cidMap.getKey() + ',' + cidMap.getValue());
+				}
+				this.subWriter.flush();
+				this.subWriter.close();
+				
+				
+				for (Map.Entry<String, String> subuuidMap : this.allSubjectStrs.entrySet()) {
+					this.subUUIDDetailWriter.println(subuuidMap.getKey() + ',' + subuuidMap.getValue());
+				}
+				this.subUUIDDetailWriter.flush();
+				this.subUUIDDetailWriter.close();
+
+				
+				for (DefaultEdge e : this.forkGraph.edgeSet()) {
+					//String[] node = e.toString().split(" : ");
+					//String nd0 = node[0].substring(1, node[0].length());
+					//String nd1 = node[1].substring(0, node[0].length() - 1);
+					this.cidGraphWriter.println(e.toString());
+				}
+				this.cidGraphWriter.flush();
+				this.cidGraphWriter.close();
+				
+				this.eventWriter.flush();
+				this.eventWriter.close();
+				
+
 			} else {
 				while (dataFileReader.hasNext()) {
 					recCNT += 1;
