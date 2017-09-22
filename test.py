@@ -129,9 +129,8 @@ def test(args):
                     print (a+1)
 
 
-                    for i in range(3):
-                        #print(i)
-                                              
+                    for i in range(2):
+                        #print(i)                                              
                         predicated_list += data_loader.event_vocab_rev.get(sortedevent[i]) + ' '
                     predicated_list += '] ' + data_loader.para_vocab_rev.get(argval1) + ' ' +  data_loader.para_vocab_rev.get(argval2)
                     print(sortedevent) 
