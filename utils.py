@@ -53,6 +53,8 @@ class TextLoader():
             print("loading para preprocessedVocab files")
             self.load_preprocessedVocab(self.para_vocab_file)    
 
+
+
         
         if not (os.path.exists(self.event_tensor_file)):
             print("self.event_tensor_file" + self.event_tensor_file)
@@ -137,12 +139,18 @@ class TextLoader():
             #The same operation like this [self.vocab[word] for word in x_text]
             # index of words as our basic data
             list_event = []
+            print("test1")
+            counter = 0
             for event in event_text:
+                #counter += 1
                 if self.event_vocab.has_key(event):
+                    #print("event")                    
                     list_event.append(self.event_vocab.get(event))
                 else :
+                    #print("event1")
                     list_event.append(0)
-                self.event_tensor = np.array(list_event)    
+            
+            self.event_tensor = np.array(list_event)    
             #print(self.event_tensor)
             # Save the data to data.npy
             np.save(tensor_file, self.event_tensor)
@@ -166,8 +174,8 @@ class TextLoader():
                     list_para.append(self.para_vocab.get(p))
                 else :
                     list_para.append(0)
-                self.para1_tensor = np.array(list_para)    
-
+            
+            self.para1_tensor = np.array(list_para)    
             np.save(tensor_file, self.para1_tensor)
 
 
@@ -189,8 +197,8 @@ class TextLoader():
                     list_para.append(self.para_vocab.get(p))
                 else :
                     list_para.append(0)
-                self.para2_tensor = np.array(list_para)    
-
+            
+            self.para2_tensor = np.array(list_para)    
             np.save(tensor_file, self.para2_tensor)   
 
         

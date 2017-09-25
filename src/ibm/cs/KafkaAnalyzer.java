@@ -913,10 +913,7 @@ public class KafkaAnalyzer {
 					} else {	
 						predType += ";" + type;
 					}
-					
-					
-			
-					
+							
 					//predType += ";" + type + "1";
 			} else {
 				predType = "noUUID1";
