@@ -29,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.BufferedWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -183,6 +184,10 @@ public class KafkaAnalyzer {
 	public static Map<String, List<String>> suspSubjEventUUIDs = Collections
 			.synchronizedMap(new HashMap<String, List<String>>());
 
+	public static Map<String, List<String>> allSubjEventUUIDs = Collections
+			.synchronizedMap(new HashMap<String, List<String>>());
+
+	
 	public static Map<String, String> pendingEventStrs = Collections.synchronizedMap(new HashMap<String, String>());
 
 	// private HashMap<String, Event> suspEventNodes = new HashMap<String,
@@ -264,7 +269,7 @@ public class KafkaAnalyzer {
 			DefaultEdge.class);
 	public static DirectedGraph<String, DefaultEdge> forkGraphUUID = new DefaultDirectedGraph<String, DefaultEdge>(
 			DefaultEdge.class);
-	private HashMap<String, String> cid2UUIDMap = new HashMap<String, String>();
+	public static HashMap<String, String> cid2UUIDMap = new HashMap<String, String>();
 
 
 	
@@ -785,19 +790,25 @@ public class KafkaAnalyzer {
 				subjectStore+= ","  + subject.getCmdLine();
 		
 			String cidStr = subject.getCid().toString();
+			String startTime = subject.getStartTimestampNanos().toString();
 			String ppidStr = "";
 			String propString = cidStr;
 			HashMap<CharSequence, CharSequence> props = (HashMap) subject.getProperties();		
 			for (CharSequence i : props.keySet()) {
 				String item = i.toString();
 				if (item.contains("name") || item.contains("cwd") || item.contains("ppid")){
+					
 					if (item.contains("ppid")) ppidStr = props.get(i).toString();
-					if (props.get(i)!=null ){
+					if (props.get(i)!=null){
 						//fireFoxUUID.add(subHexUUID);
 						propString += "," + props.get(i).toString();
-					}						
-				}									
+					}					
+				}	
+				if (item.contains("time") && startTime.length()<5)
+					startTime = props.get(i).toString().replace(".", "");						
+				
 			}
+			
 			
 			//String subHexUUID = fields[1];
 			//String appname = subject.getCmdLine().toString();			
@@ -809,6 +820,12 @@ public class KafkaAnalyzer {
 		
 			//System.out.println(propString);
 			subjectStore+= ","  + propString;
+			if (startTime.length()>15)
+				subjectStore+=',' + startTime.substring(0, startTime.length()-6);
+			else 
+				subjectStore+=',' + startTime;
+			 
+			//System.out.println(subject.toString());
 			//System.out.println(subjectStore);
 
 			this.allSubjectStrs.put(subHexUUID, subjectStore);
@@ -828,6 +845,7 @@ public class KafkaAnalyzer {
 			}
 		
 			
+			
 			if (!this.forkGraph.containsVertex(cidStr))
 				this.forkGraph.addVertex(cidStr);			
 			if (!this.forkGraph.containsVertex(ppidStr))
@@ -835,6 +853,11 @@ public class KafkaAnalyzer {
 			if (!this.forkGraph.containsEdge(cidStr, ppidStr))
 				this.forkGraph.addEdge(cidStr, ppidStr);
 			 
+			String report_cid = this.report_dir_path + '/' + cidStr;
+			File report_dir = new File(report_cid);
+			if (!report_dir.exists())
+				report_dir.mkdirs();	
+			
 			/*
 			if (!this.forkGraphUUID.containsVertex(subHexUUID))
 				this.forkGraphUUID.addVertex(subHexUUID);			
@@ -871,10 +894,11 @@ public class KafkaAnalyzer {
 			
 			break;
 
-		
 			
 			
 		case "Event":
+			
+			
 			Event enode = new Event();
 			enode = (Event) datum;
 			UUID eUUID = enode.getUuid();
@@ -980,21 +1004,36 @@ public class KafkaAnalyzer {
 			Integer eTid = enode.getThreadId();
 			CharSequence ppt = enode.getProgramPoint();
 
-
-			//System.out.println(eventType + " " + predType);
 			
+			/*						
 			String assEventStr = Util.assemblyEventStr(predObjectHex, suuidHex, euuidHex, apicall, eventType, eventTime,
 					eSeq, eTid, ppt);
-		
-			if (!eventType.contains("EVENT_UNIT")){//eventType.contains("EVENT_FORK") || eventType.contains("EVENT_EXECUTE") || eventType.contains("EVENT_CLONE")) {
-				String eventTrace = eventTime.toString().substring(0, 13) + "," + eventType + ";" + predType + "," + suuidHex + "," + suuidHex.substring(suuidHex.length()-6, suuidHex.length()) + "," + eTid + "," + eSeq;
-				this.eventWriter.println(eventTrace);// + "," + predObjectHex);				
-			}
-
+			
+			String eventParaStr = "";
 			ArrayList<Value> paraList = new ArrayList<Value>();
 			if (enode.getParameters() != null) {
 				paraList.addAll(enode.getParameters());
 			}
+			eventParaStr = Util.printAllEventParamDetails(paraList, suuidHex);
+			*/
+			
+			//System.out.println(assEventStr + ":;:" + eventParaStr);
+			//events.add(assEventStr + ":;:" + eventParaStr);
+			if (!eventType.contains("EVENT_UNIT")){ //eventType.contains("EVENT_FORK") || eventType.contains("EVENT_EXECUTE") || eventType.contains("EVENT_CLONE")) {
+				List<String> events = KafkaAnalyzer.allSubjEventUUIDs.get(suuidHex);
+				if (events == null) {
+					events = new ArrayList<String>();
+				//System.out.println(suuidHex + "events" + events);
+					KafkaAnalyzer.allSubjEventUUIDs.put(suuidHex, events);
+				}
+				//"," + suuidHex +
+				String eventTrace = eventTime.toString().substring(0, 13) + "," + eventType + ";" + predType + "," + suuidHex.substring(suuidHex.length()-6, suuidHex.length()) + "," + eTid + "," + eSeq;
+				//this.eventWriter.println(eventTrace);// + "," + predObjectHex);				
+				events.add(eventTrace);
+			}
+			
+			
+
 			
 			//String tid = enode.getThreadId().toString();
 			/*
@@ -1018,6 +1057,7 @@ public class KafkaAnalyzer {
 			 */
 			//String eventParaStr = Util.printAllEventParamDetails(paraList, suuidHex);
 			break;
+			
 		case "ProvenanceTagNode":
 			ProvenanceTagNode provenanceTagNode = (ProvenanceTagNode) datum;
 			UUID targetTagId = provenanceTagNode.getTagId();
@@ -2034,19 +2074,29 @@ public class KafkaAnalyzer {
 			long procCNT = 0;
 			ArrayList<Object> datumList = new ArrayList<Object>();
 			if (dump) {
+				recCNT = 0;
 				while (dataFileReader.hasNext()) {
+					recCNT += 1;
 					transaction = dataFileReader.next(transaction);
 					processDatum17Dump(transaction.getDatum());
-				}
+					
+					if (recCNT % 5000 == 0) {
+						// Util.queryFCCE("queryelembyproperty");
+						// Util.queryFCCE("queryelembyuuidB");
+						//Util.matchSuspEvents();
+						Util.reportAllSubjEvents(this.report_dir_path);
+						//Util.reportSuspSubj();
+						//Util.reportTime(startTime, recCNT);
+					}
+				}				
 
-				
-
+				/*
 				for (Map.Entry<String, String> cidMap : this.cid2UUIDMap.entrySet()) {
 					this.subWriter.println(cidMap.getKey() + ',' + cidMap.getValue());
 				}
 				this.subWriter.flush();
 				this.subWriter.close();
-				
+				*/
 				
 				for (Map.Entry<String, String> subuuidMap : this.allSubjectStrs.entrySet()) {
 					this.subUUIDDetailWriter.println(subuuidMap.getKey() + ',' + subuuidMap.getValue());
@@ -2056,9 +2106,6 @@ public class KafkaAnalyzer {
 
 				
 				for (DefaultEdge e : this.forkGraph.edgeSet()) {
-					//String[] node = e.toString().split(" : ");
-					//String nd0 = node[0].substring(1, node[0].length());
-					//String nd1 = node[1].substring(0, node[0].length() - 1);
 					this.cidGraphWriter.println(e.toString());
 				}
 				this.cidGraphWriter.flush();
@@ -2068,6 +2115,13 @@ public class KafkaAnalyzer {
 				this.eventWriter.close();
 				
 
+				
+				
+				
+				
+				
+				
+				
 			} else {
 				while (dataFileReader.hasNext()) {
 					recCNT += 1;

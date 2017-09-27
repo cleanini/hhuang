@@ -4,6 +4,8 @@ import java.awt.FontFormatException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.BufferUnderflowException;
@@ -20,10 +22,12 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 
 import org.jgrapht.graph.DefaultEdge;
 
@@ -32,6 +36,7 @@ import com.bbn.tc.schema.avro.TagRunLengthTuple;
 import com.bbn.tc.schema.avro.UUID;
 import com.bbn.tc.schema.avro.Value;
 import com.bbn.tc.schema.avro.ValueDataType;
+import java.io.BufferedWriter;
 
 public class Util {
 	
@@ -682,6 +687,69 @@ public class Util {
 		KafkaAnalyzer.subAllWriter.flush();
 	}
 
+	
+	public static void reportAllSubjEvents(String dir) {
+		System.out
+				.println("====================Report ALL process Events=======================\n");
+		//Map<String, Integer> sortedSubjVec = Util.sortByValue(KafkaAnalyzer.subjectScoreVector);
+		
+		for (Map.Entry<String, String> cidMap : KafkaAnalyzer.cid2UUIDMap.entrySet()) {
+			//System.out.println(cidMap.getKey() + ',' + );
+			String [] suuids = cidMap.getValue().split(";");
+			
+			for (String suuid : suuids) {			
+				File eventTracReport = new File(
+					dir + '/' + cidMap.getKey() + '/' + cidMap.getKey() + '-' + suuid + ".txt");
+				try {
+				// System.out.println("created FILE\n");
+					KafkaAnalyzer.eventTracWriter = 
+							new PrintWriter(new BufferedWriter(new FileWriter(eventTracReport.getAbsolutePath(), true)));
+					List<String> sList = KafkaAnalyzer.allSubjEventUUIDs.get(suuid);
+					
+					ArrayList<String> eventStringList = new ArrayList<String>();
+					Optional.ofNullable(sList).ifPresent(eventStringList::addAll);
+					reportRankedTracesAll(KafkaAnalyzer.eventTracWriter, suuid, eventStringList);
+					//KafkaAnalyzer.eventTracWriter.close();
+					
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+				    System.err.println(e);
+				}
+							
+		}}
+		
+		//ExecutorService service = Executors.newFixedThreadPool(4);
+		/*
+		for (String suuidHex : sortedSubjVec.keySet()) {
+			Integer scoreVec = sortedSubjVec.get(suuidHex);
+			if (scoreVec != null) {
+				if (scoreVec.intValue() > 0) { // has file or network activities
+					if (KafkaAnalyzer.suspSubjEventUUIDs.containsKey(suuidHex) && (KafkaAnalyzer.suspSubjEventUUIDs.get(suuidHex).size()>5)) { //scoreVec.intValue() > 16 ||
+					
+						System.out.println(
+								"Number of Events:" + suuidHex + ' '+ KafkaAnalyzer.suspSubjEventUUIDs.get(suuidHex).size() + '\n');																
+						try {
+							//sortTraces(CountDownLatch lt, String name, ArrayList<String> eventList, String suuidHexStr, String dir) {
+							KafkaAnalyzer.mutex.acquire();
+							sortTracesMulti r;
+							List<String> sList = KafkaAnalyzer.suspSubjEventUUIDs.get(suuidHex);
+							r = new sortTracesMulti("Thread:" + suuidHex, sList, suuidHex, dir);
+							KafkaAnalyzer.mutex.release();
+							KafkaAnalyzer.service.submit(r);
+	
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}												
+						KafkaAnalyzer.suspSubjEventUUIDs.get(suuidHex).clear();						
+					}
+				}
+			}
+		}*/
+	}
+		
+		
 	public static void reportSuspSubjEvents(String dir) {
 		System.out
 				.println("====================Report suspcious process Events=======================\n");
@@ -742,6 +810,112 @@ public class Util {
 																// 31617801599
 	}
 
+	public static void reportRankedTracesAll(PrintWriter eventTracWriterSub, String suuidHex, ArrayList<String> eventStringList) { // multithreads
+
+			Iterator<String> eventItr = eventStringList.iterator();
+			List<String> eventList = new ArrayList<String>();
+			
+			HashMap<String, String> suspProcHash = new HashMap<String, String>();
+			HashMap<String, String> suspEventHash = new HashMap<String, String>();
+
+			String eventStr = "";
+			while (eventItr.hasNext()) {
+			   eventStr = eventItr.next();
+			  //System.out.println(eventStr);
+			 //eventTracWriterSub.append(eventStr+"\n");
+			 //if (eventStr.contains(suspSub)) {
+			  
+			  String[] eventfds = eventStr.split(",");
+			  if (eventfds.length > 4) {
+				suspProcHash.put(eventfds[4], eventStr);
+				suspEventHash.put(eventfds[4], eventfds[1]);
+				//System.out.println(eventfds[4] + ' ' + eventfds[4] + ' ' + eventfds[0]);				
+				eventList.add(eventfds[4]);
+			  }
+				// KafkaAnalyzer.suspEventStrs.remove(euuidHex);
+			}
+			
+			//System.out.println("Seq#, InvokedTimes, suspAPICall, provenanceUUIDSorting");
+			
+			eventList.sort((left, right) -> Integer.parseInt(left) - Integer.parseInt(right));
+			//System.out.println("Seq#, InvokedTimes, suspAPICall, provenanceUUID === Sorted");
+			// sort it
+			String prev = "";
+			String next = "";
+			String preSeq = "1400000000000,EVENT_SEPARATE;;noUUID1;noUUID2,0,0,0,0";
+			//eventTracWriterSub.print("Seq#, InvokedTimes, suspAPICall, provenanceUUID"); // suspSub.substring(25,
+			//System.out.println("Seq#, InvokedTimes, suspAPICall, provenanceUUID"); 
+			/*
+			for (String seq : eventList) {
+				eventTracWriterSub.print(seq); // suspSub.substring(25,
+			}*/
+			
+			int cnt = 1;
+			for (String seq: eventList) {
+				next = suspEventHash.get(seq);
+
+				if (!prev.contains(next)){
+					//System.out.println(preSeq);
+					eventTracWriterSub.print(preSeq + ',' +  cnt + '\n');
+					cnt = 1;
+				
+					prev = next;
+					preSeq = suspProcHash.get(seq);
+				}
+				else 
+					cnt += 1;				
+			}
+			eventTracWriterSub.flush();
+			eventTracWriterSub.close();
+			
+			
+			if (KafkaAnalyzer.allSubjEventUUIDs.containsKey(suuidHex))
+				KafkaAnalyzer.allSubjEventUUIDs.get(suuidHex).clear(); // only report periodically
+			
+			
+			/*
+			int cnt = 1;
+			for (String seq : eventList) {
+				next = suspProcHash.get(seq);
+				if (!prev.contains(next)) {
+					if (prev != "") {
+						String apicall = prev.split("\\(")[0];
+						String[] fds = prev.split("\\)");
+						String preduuid = "";
+						if (fds.length > 1)
+							preduuid = fds[1];
+						String[] preds = preduuid.split(";;");
+						String predsPrint = ";;";
+						for (int i = 1; i < preds.length; i++) {
+							predsPrint += ',' + preds[i];
+						}
+						if (preds.length > 1)
+							eventTracWriterSub.println(preSeq + ":  invoked " + cnt + " times:   " + apicall + " " + predsPrint);
+						else 
+							eventTracWriterSub.println(preSeq + ":  invoked " + cnt + " times:   " + apicall + " NoPredPath");
+					} // suspSub.substring(25, suspSub.length()) + ':'
+					prev = next;
+					preSeq = seq;
+					cnt = 1;
+				} else
+					cnt += 1;
+			}
+
+			String apicall = prev.split("\\(")[0];
+			String[] preduuids = prev.split("\\)");
+			String preduuid = "";
+			if (preduuids.length > 1)
+				preduuid = preduuids[1];
+			eventTracWriterSub.println(preSeq + ":  invoked " + cnt + " times:   " + apicall + ", " + preduuid);
+			*/
+		
+		
+		
+		 
+	}
+	
+	
+	
 	public static void reportRankedTraces(PrintWriter eventTracWriterSub, String suuidHex, ArrayList<String> eventStringList) { // multithreads
 		System.out.println("======================Report Sorted Suspicious Traces " + suuidHex + "\n");
 		//Iterator<String> eventItr = KafkaAnalyzer.suspSubjEventUUIDs.get(suuidHex).iterator();
