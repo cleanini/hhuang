@@ -18,6 +18,10 @@ from os.path import isfile, join
 
 def main():
     parser = argparse.ArgumentParser()
+
+    parser.add_argument('--cid_num', type=str, default='0000',
+                        help='data directory containing input')
+
     parser.add_argument('--data_dir', type=str, default='data/trace',
                         help='data directory containing input')
     parser.add_argument('--save_dir', type=str, default='save',
@@ -62,7 +66,7 @@ def test(args):
     onlyfiles = [f for f in listdir(args.data_dir) if isfile(join(args.data_dir, f)) and 
         (not ("pkl" in f) and not ("npy" in f)) ]
      
-    data_loader = TextLoader(args.data_dir, onlyfiles, 1, 50)    
+    data_loader = TextLoader(args.data_dir, onlyfiles, 1, 50, args.cid_num)    
     data_loader.reset_batch_pointer()
 
 
@@ -78,7 +82,7 @@ def test(args):
             #state = sess.run(model.cell.zero_state(1, tf.float32))
 
             x_e, y_e, x_p1, y_p1, x_p2, y_p2= data_loader.next_batch()
-            #print(x_e, y_e, x_p1, y_p1)
+            print(x_e, y_e, x_p1, y_p1)
             argpara = zip(x_e, x_p1, x_p2, y_e, y_p1, y_p2) # get a sequence of (e, p1, p2)            
             #tgtargpara = zip(y_e, y_p1, y_p2) # get a sequence of (e, p1, p2)            
             #print (argpara)

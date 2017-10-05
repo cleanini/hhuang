@@ -7,11 +7,12 @@ import tensorflow as tf
 
 
 class TextLoader():
-    def __init__(self, data_dir, file_list, batch_size, seq_length, encoding=None):
+    def __init__(self, data_dir, file_list, batch_size, seq_length, cid_num, encoding=None):
         self.data_dir = data_dir
         self.batch_size = batch_size
         self.seq_length = seq_length
         self.encoding = encoding
+        self.cid_num = cid_num
 
         onlyfiles = [f for f in file_list]
 
@@ -26,13 +27,13 @@ class TextLoader():
                 #self.para_tensor_file = os.path.join(data_dir, self.para_input_file + "para-data.npy")
            
 
-            if "e-" in f and "input" in f:
+            if "e-" in f and "input" in f and self.cid_num in f and "time" not in f:
                 self.event_input_file = os.path.join(data_dir, f)
                 self.event_tensor_file = os.path.join(data_dir, self.event_input_file + "event-data.npy")
-            if "p1-" in f and "input" in f:
+            if "p1-" in f and "input" in f and self.cid_num in f:
                 self.para1_input_file = os.path.join(data_dir, f)
                 self.para1_tensor_file = os.path.join(data_dir, self.para1_input_file + "para1-data.npy")
-            if "p2-" in f and "input" in f:
+            if "p2-" in f and "input" in f and self.cid_num in f:
                 self.para2_input_file = os.path.join(data_dir, f)
                 self.para2_tensor_file = os.path.join(data_dir, self.para2_input_file + "para2-data.npy")
             
@@ -123,6 +124,7 @@ class TextLoader():
 
 
     def preprocess2Tensor(self, input_file, vocab_file, tensor_file):
+        print(input_file)
         with codecs.open(input_file, "r", encoding=self.encoding) as f:
             data = f.read()        
         #counter = collections.Counter(data) # Counter({2: 4, 3: 4, 1: 3, 4: 2, 5: 1})
@@ -144,10 +146,10 @@ class TextLoader():
             for event in event_text:
                 #counter += 1
                 if self.event_vocab.has_key(event):
-                    #print("event")                    
+                    print("eventIn" + event)                    
                     list_event.append(self.event_vocab.get(event))
                 else :
-                    #print("event1")
+                    print("not match" + event)
                     list_event.append(0)
             
             self.event_tensor = np.array(list_event)    

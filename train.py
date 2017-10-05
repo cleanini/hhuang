@@ -15,6 +15,9 @@ from os.path import isfile, join
 def main():
     parser = argparse.ArgumentParser(
                         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    
+    parser.add_argument('--cid_num', type=str, default='0000',
+                        help='data directory containing input')
     parser.add_argument('--data_dir', type=str, default='data/trace',
                         help='data directory containing input')
     parser.add_argument('--save_dir', type=str, default='save',
@@ -82,7 +85,7 @@ def train(args):
 
     for f in onlyfiles:
         print(f)
-    data_loader = TextLoader(args.data_dir, onlyfiles, args.batch_size, args.seq_length)
+    data_loader = TextLoader(args.data_dir, onlyfiles, args.batch_size, args.seq_length, args.cid_num)
     args.event_vocab_size = data_loader.event_vocab_size
     args.para_vocab_size = data_loader.para_vocab_size 
     #event_vocab_rev
