@@ -76,6 +76,7 @@ def test(args):
         saver = tf.train.Saver(tf.global_variables())
         ckpt = tf.train.get_checkpoint_state(args.save_dir)
 
+        eventWin = []
         if ckpt and ckpt.model_checkpoint_path:
             saver.restore(sess, ckpt.model_checkpoint_path)
 
@@ -131,7 +132,16 @@ def test(args):
                         if sortedevent[x]==et:
                           a = x
                     print (a+1)
+                    eventWin.append(a+1)
+                    if (len(eventWin)==11):
+                        eventWin.pop(0)
 
+                    total = 0
+                    for i in eventWin:
+                        total += i
+
+                    print(total/len(eventWin))
+                        
 
                     for i in range(2):
                         #print(i)                                              
