@@ -1,0 +1,247 @@
+loading event preprocessedVocab files
+loading para preprocessedVocab files
+self.event_tensor_file/data/result/09-29-17-01-31/e-input.csv30468event-data.npy
+loading event preprocessed tensor files
+self.para1_tensor_file/data/result/09-29-17-01-31/p1-input.csv30468para1-data.npy
+loading para1 preprocessed tensor files
+self.para2_tensor_file/data/result/09-29-17-01-31/p2-input.csv30468para2-data.npy
+loading para2 preprocessed tensor files
+[[35 29 44 29 44 29 44 29 44 29 44 29 44 29 44 29 44 29 44 29 44 29 44 29
+  44 29 44  0 44  0 44 29 44 29 44 29 44 29 44 29 44 29 44 29 44 29 44 29
+  44 29]] [[29 44 29 44 29 44 29 44 29 44 29 44 29 44 29 44 29 44 29 44 29 44 29 44
+  29 44  0 44  0 44 29 44 29 44 29 44 29 44 29 44 29 44 29 44 29 44 29 44
+  29 44]] [[1 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+  3 3 3 3 3 3 3 3 3 3 3 3 3]] [[3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+  3 3 3 3 3 3 3 3 3 3 3 3 3]]
+[(array([35, 29, 44, 29, 44, 29, 44, 29, 44, 29, 44, 29, 44, 29, 44, 29, 44,
+       29, 44, 29, 44, 29, 44, 29, 44, 29, 44,  0, 44,  0, 44, 29, 44, 29,
+       44, 29, 44, 29, 44, 29, 44, 29, 44, 29, 44, 29, 44, 29, 44, 29]), array([1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+       3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+       3, 3, 3, 3]), array([2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+       2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+       2, 2, 2, 2]), array([29, 44, 29, 44, 29, 44, 29, 44, 29, 44, 29, 44, 29, 44, 29, 44, 29,
+       44, 29, 44, 29, 44, 29, 44, 29, 44,  0, 44,  0, 44, 29, 44, 29, 44,
+       29, 44, 29, 44, 29, 44, 29, 44, 29, 44, 29, 44, 29, 44, 29, 44]), array([3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+       3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+       3, 3, 3, 3]), array([2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+       2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+       2, 2, 2, 2]))]
+========  
+6
+========  
+7
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+21
+abnormal events:
+[31 44 27 22  7 29 26 35 17 15  8  6 32 42 12  4 24 34 18 16  0  5 13 20  1
+ 40 14 36 11 37 23 38  3 25 39  9 33  2 30 10 43 41 28 21 19]
+observed:EVENT_ACCEPT
+predicate:[EVENT_RECVMSG EVENT_WRITE EVENT_OPEN EVENT_MMAP EVENT_CLOSE EVENT_READ ] tmp_t:so noUUID2
+========  
+4
+========  
+21
+abnormal events:
+[31 44 27 22  7 29 26 35 17 15  8  6 32 42 12  4 24 34 18 16  0  5 13 20  1
+ 40 14 36 11 37 23 38  3 25 39  9 33  2 30 10 43 41 28 21 19]
+observed:EVENT_ACCEPT
+predicate:[EVENT_RECVMSG EVENT_WRITE EVENT_OPEN EVENT_MMAP EVENT_CLOSE EVENT_READ ] tmp_t:so noUUID2
+========  
+4
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+observed:EVENT_WRITE
+predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_RECVMSG ] system_u:object_r:usr_t:s0 noUUID2
+========  
+6
+========  
+7
+abnormal events:
+[22 27  7 26 29 31 44 15  8 35  6 17 42 32  4 12  5 24 16 13 34 18 20  0  1
+ 33 39 11 25 40  9 23  3 14 30  2 36 37 38 10 41 28 21 43 19]
+time/batch = 6.639

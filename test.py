@@ -21,6 +21,10 @@ def main():
 
     parser.add_argument('--cid_num', type=str, default='0000',
                         help='data directory containing input')
+    
+    parser.add_argument('--susp_rank', type=int, default=6,
+                        help='threshold for alerting suspicious events')
+    
 
     parser.add_argument('--data_dir', type=str, default='data/trace',
                         help='data directory containing input')
@@ -36,6 +40,11 @@ def main():
                        help='width of the beam search')
     parser.add_argument('--sample', type=int, default=1,
                        help='0 to use max at each timestep, 1 to sample at each timestep, 2 to sample on spaces')
+
+    parser.add_argument('--batch_size', type=int, default=10,
+                        help='minibatch size')
+    parser.add_argument('--seq_length', type=int, default=25,
+                        help='RNN sequence length')
 
     args = parser.parse_args()
     test(args)
@@ -90,17 +99,21 @@ def test(args):
             predicated_list = ""
             start = time.time()
 
+            count = 0
             print (argpara)
             for (elist, p1list, p2list, elistNext, p1listNext, p2listNext) in argpara:                                
                 for e, p1, p2, et, p1t, p2t in zip(elist, p1list, p2list, elistNext, p1listNext, p2listNext):
                     state = sess.run(model.cell.zero_state(1, tf.float32))
+                    count += 1
 
-                    if  not data_loader.event_vocab_rev.get(e) in predicated_list:
+                    suspiciousRank = args.susp_rank
+                    if  count > 3 and not data_loader.event_vocab_rev.get(e) in predicated_list:
                         #print ("observed:" + data_loader.event_vocab_rev.get(e))# + ' ' + data_loader.para_vocab_rev.get(p1) + ' ' + data_loader.para_vocab_rev.get(p2))
                         #print (e) 
                         print ("observed:" + data_loader.event_vocab_rev.get(e))
                         print (predicated_list)
                     
+
                     print("========  ") 
                     #print (e, p1, p2)
                     
@@ -133,21 +146,26 @@ def test(args):
                           a = x
                     print (a+1)
                     eventWin.append(a+1)
-                    if (len(eventWin)==11):
+                    if (len(eventWin)==5):
                         eventWin.pop(0)
 
                     total = 0
                     for i in eventWin:
                         total += i
 
-                    print(total/len(eventWin))
+                    arg = total/len(eventWin)
                         
 
-                    for i in range(2):
+                    for i in range(suspiciousRank):
                         #print(i)                                              
                         predicated_list += data_loader.event_vocab_rev.get(sortedevent[i]) + ' '
                     predicated_list += '] ' + data_loader.para_vocab_rev.get(argval1) + ' ' +  data_loader.para_vocab_rev.get(argval2)
-                    print(sortedevent) 
+                     
+                    #if arg > 3: 
+                    # print("Average suspicious ranking:" + str(arg))
+                    if count > 3 and a+1 > suspiciousRank:
+                      print("abnormal events:")
+                      print(sortedevent) 
                     
                     #e = eventval.eval()                    
                     #arg1 = argval1.eval()
