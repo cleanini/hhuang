@@ -134,4 +134,4 @@ loading para2 preprocessed tensor files
 1
 ========  
 7
-time/batch = 6.269
+time/batch = 5.900
