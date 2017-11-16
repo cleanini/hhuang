@@ -133,7 +133,7 @@ def train(args):
     
 
 
-
+    
     with open(os.path.join(args.save_dir, 'config.pkl'), 'wb') as f:
         cPickle.dump(args, f)
     with open(os.path.join(args.save_dir, 'event_words_vocab.pkl'), 'wb') as f:

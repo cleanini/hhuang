@@ -85,6 +85,10 @@ class Model():
         #                                [args.rnn_size, para_vocab_size])
         #    softmax_b3 = tf.get_variable("softmax_b3", [args.para_vocab_size])
                 
+        #event_embedding_para_W = tf.get_variable("event_embedding_para_W", [args.event_vocab_size, args.rnn_size, args.rnn_size])
+        #event_embedding_para_b = tf.get_variable("event_embedding_para_b", [1, args.rnn_size])
+        #para1_inputs = tf.einsum("ijk,ik->ij", event_embedding_para_W, tf.nn.embedding_lookup(para_embedding, self.para1_input_data)) + event_embedding_para_b
+        
         
         event_embedding = tf.get_variable("event_embedding", [args.event_vocab_size, args.rnn_size])
         para_embedding = tf.get_variable("para_embedding", [args.para_vocab_size, args.rnn_size])
