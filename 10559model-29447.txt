@@ -226,4 +226,4 @@ predicate:[EVENT_MMAP EVENT_OPEN EVENT_CLOSE EVENT_MPROTECT EVENT_READ EVENT_REC
 3
 ========  
 3
-time/batch = 6.022
+time/batch = 5.907
