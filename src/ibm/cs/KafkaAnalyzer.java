@@ -61,41 +61,42 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.TopicPartition;
-//import com.bbn.tc.schema.avro.Principal;
-import com.bbn.tc.schema.avro.Event;
-import com.bbn.tc.schema.avro.Value;
-import com.bbn.tc.schema.avro.ValueDataType;
-import com.bbn.tc.schema.avro.NetFlowObject;
-import com.bbn.tc.schema.avro.ProvenanceTagNode;
+//import com.bbn.tc.schema.avro.cdm18.Principal;
+import com.bbn.tc.schema.avro.cdm18.Event;
+import com.bbn.tc.schema.avro.cdm18.Value;
 
-//import com.bbn.tc.schema.avro.SimpleEdge;
-import com.bbn.tc.schema.avro.SrcSinkObject;
-import com.bbn.tc.schema.avro.Subject;
-import com.bbn.tc.schema.avro.TCCDMDatum;
-import com.bbn.tc.schema.avro.UUID;
+import com.bbn.tc.schema.avro.cdm18.ValueDataType;
+import com.bbn.tc.schema.avro.cdm18.NetFlowObject;
+import com.bbn.tc.schema.avro.cdm18.ProvenanceTagNode;
+
+//import com.bbn.tc.schema.avro.cdm18.SimpleEdge;
+import com.bbn.tc.schema.avro.cdm18.SrcSinkObject;
+import com.bbn.tc.schema.avro.cdm18.Subject;
+import com.bbn.tc.schema.avro.cdm18.TCCDMDatum;
+import com.bbn.tc.schema.avro.cdm18.UUID;
 import com.bbn.tc.schema.serialization.AvroConfig;
 
-import com.bbn.tc.schema.avro.RegistryKeyObject; // fived
-import com.bbn.tc.schema.avro.TimeMarker; // fived
+import com.bbn.tc.schema.avro.cdm18.RegistryKeyObject; // fived
+import com.bbn.tc.schema.avro.cdm18.TimeMarker; // fived
 
-import com.bbn.tc.schema.avro.UnitDependency; //trace 
-import com.bbn.tc.schema.avro.UnnamedPipeObject;//trace
-import com.bbn.tc.schema.avro.MemoryObject;
+import com.bbn.tc.schema.avro.cdm18.UnitDependency; //trace 
+import com.bbn.tc.schema.avro.cdm18.UnnamedPipeObject;//trace
+import com.bbn.tc.schema.avro.cdm18.MemoryObject;
 
 
-import com.bbn.tc.schema.avro.ConfidentialityTag;
-//import com.bbn.tc.schema.avro.EdgeType;
-import com.bbn.tc.schema.avro.EventType;
-import com.bbn.tc.schema.avro.FileObject;
-import com.bbn.tc.schema.avro.IntegrityTag;
+import com.bbn.tc.schema.avro.cdm18.ConfidentialityTag;
+//import com.bbn.tc.schema.avro.cdm18.EdgeType;
+import com.bbn.tc.schema.avro.cdm18.EventType;
+import com.bbn.tc.schema.avro.cdm18.FileObject;
+import com.bbn.tc.schema.avro.cdm18.IntegrityTag;
 
-import com.bbn.tc.schema.avro.Principal;
+import com.bbn.tc.schema.avro.cdm18.Principal;
 
-import com.bbn.tc.schema.avro.SHORT;
-import com.bbn.tc.schema.avro.SubjectType;
-//import com.bbn.tc.schema.avro.TagEntity;
-import com.bbn.tc.schema.avro.TagOpCode;
-import com.bbn.tc.schema.avro.TagRunLengthTuple;
+import com.bbn.tc.schema.avro.cdm18.SHORT;
+import com.bbn.tc.schema.avro.cdm18.SubjectType;
+//import com.bbn.tc.schema.avro.cdm18.TagEntity;
+import com.bbn.tc.schema.avro.cdm18.TagOpCode;
+import com.bbn.tc.schema.avro.cdm18.TagRunLengthTuple;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -825,9 +826,10 @@ public class KafkaAnalyzer {
 			else 
 				subjectStore+=',' + startTime;
 			 
-			//System.out.println(subject.toString());
-			//System.out.println(subjectStore);
+			System.out.println(subject.toString());
+			System.out.println(subjectStore);
 
+			
 			this.allSubjectStrs.put(subHexUUID, subjectStore);
 			
 			if (!this.cid2UUIDMap.containsKey(cidStr))
@@ -1145,7 +1147,7 @@ public class KafkaAnalyzer {
 		default:
 			System.out.println("CaseType Not Processed " +
 			  datum.getClass().toString());
-			break; // com.bbn.tc.schema.avro.Principal
+			break; // com.bbn.tc.schema.avro.cdm18.Principal
 					// EDGE_SUBJECT_HASLOCALPRINCIPAL
 		}
 		
@@ -1701,7 +1703,7 @@ public class KafkaAnalyzer {
 			 */
 			// System.out.println("CaseType Not Processed " +
 			// datum.getClass().toString());
-			break; // com.bbn.tc.schema.avro.Principal
+			break; // com.bbn.tc.schema.avro.cdm18.Principal
 					// EDGE_SUBJECT_HASLOCALPRINCIPAL
 		}
 	}
@@ -2049,7 +2051,6 @@ public class KafkaAnalyzer {
 				}
 				else 
 					System.out.println("not split:" + sCurrentLine);
-				
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -2115,12 +2116,6 @@ public class KafkaAnalyzer {
 				this.eventWriter.close();
 				
 
-				
-				
-				
-				
-				
-				
 				
 			} else {
 				while (dataFileReader.hasNext()) {

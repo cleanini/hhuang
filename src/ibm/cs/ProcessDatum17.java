@@ -5,15 +5,15 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
-import com.bbn.tc.schema.avro.Event;
-import com.bbn.tc.schema.avro.FileObject;
-import com.bbn.tc.schema.avro.NetFlowObject;
-import com.bbn.tc.schema.avro.Principal;
-import com.bbn.tc.schema.avro.ProvenanceTagNode;
-import com.bbn.tc.schema.avro.SrcSinkObject;
-import com.bbn.tc.schema.avro.Subject;
-import com.bbn.tc.schema.avro.UUID;
-import com.bbn.tc.schema.avro.Value;
+import com.bbn.tc.schema.avro.cdm18.Event;
+import com.bbn.tc.schema.avro.cdm18.FileObject;
+import com.bbn.tc.schema.avro.cdm18.NetFlowObject;
+import com.bbn.tc.schema.avro.cdm18.Principal;
+import com.bbn.tc.schema.avro.cdm18.ProvenanceTagNode;
+import com.bbn.tc.schema.avro.cdm18.SrcSinkObject;
+import com.bbn.tc.schema.avro.cdm18.Subject;
+import com.bbn.tc.schema.avro.cdm18.UUID;
+import com.bbn.tc.schema.avro.cdm18.Value;
 
 import java.util.Iterator;
 import java.util.List;

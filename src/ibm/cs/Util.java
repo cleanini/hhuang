@@ -31,11 +31,11 @@ import java.util.concurrent.Executors;
 
 import org.jgrapht.graph.DefaultEdge;
 
-import com.bbn.tc.schema.avro.Event;
-import com.bbn.tc.schema.avro.TagRunLengthTuple;
-import com.bbn.tc.schema.avro.UUID;
-import com.bbn.tc.schema.avro.Value;
-import com.bbn.tc.schema.avro.ValueDataType;
+import com.bbn.tc.schema.avro.cdm18.Event;
+import com.bbn.tc.schema.avro.cdm18.TagRunLengthTuple;
+import com.bbn.tc.schema.avro.cdm18.UUID;
+import com.bbn.tc.schema.avro.cdm18.Value;
+import com.bbn.tc.schema.avro.cdm18.ValueDataType;
 import java.io.BufferedWriter;
 
 public class Util {
