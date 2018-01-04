@@ -15,11 +15,7 @@
 	<classpathentry kind="lib" path="/Users/hhuang/android-infoflow-riskranking/lib/jgraph-5.13.0.0.jar"/>
 	<classpathentry kind="lib" path="/Users/hhuang/android-infoflow-riskranking/lib/javax.json-1.0.4.jar"/>
 	<classpathentry kind="lib" path="/Users/hhuang/Documents/cdm18-lib/tc-schema-1.0-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="/Users/hhuang/Documents/cdm18-lib/gson-2.2.1.jar"/>
 	<classpathentry kind="lib" path="/Users/hhuang/Documents/cdm18-lib/tc-avro-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
 	<classpathentry kind="lib" path="/Users/hhuang/Documents/cdm18-lib/tc-avro-1.0-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="/Users/hhuang/Documents/cdm17-lib/tc-avro-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
-	<classpathentry kind="lib" path="/Users/hhuang/Documents/cdm17-lib/tc-avro-1.0-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="/Users/hhuang/Documents/cdm17-lib/gson-2.2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

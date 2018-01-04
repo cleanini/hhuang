@@ -1,6 +1,6 @@
 package ibm.cs;
 
-import com.bbn.tc.schema.avro.cdm18.StartMarker;
+//import com.bbn.tc.schema.avro.StartMarker;
 import com.bbn.tc.schema.avro.cdm18.UUID;
 
 public class CUUID implements Comparable {

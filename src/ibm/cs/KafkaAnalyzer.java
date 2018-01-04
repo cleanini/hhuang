@@ -1903,9 +1903,9 @@ public class KafkaAnalyzer {
 						System.out.printf("Takes: " + (System.nanoTime() - startTime) / 1000000000
 								+ "(s) to process: %.1f records...\n", recCNT); // 32262852498
 						if (multithread) {
-							ProcessDatum17 r;
+							ProcessDatum18 r;
 							try {
-								r = new ProcessDatum17(latch, "Thread:" + recCNT, datumList, KafkaAnalyzer.typecnt);
+								r = new ProcessDatum18(latch, "Thread:" + recCNT, datumList, KafkaAnalyzer.typecnt);
 								r.start(); // Thread.sleep(10000);
 								KafkaAnalyzer.mutex.acquire();
 								// System.out.println("Cleaning " + recCNT);
@@ -1927,7 +1927,7 @@ public class KafkaAnalyzer {
 					}
 					/*
 					 * if (multithread) { if (!datumList.isEmpty()) {
-					 * ProcessDatum17 r; try { r = new ProcessDatum17(latch,
+					 * ProcessDatum18 r; try { r = new ProcessDatum18(latch,
 					 * "Thread:" + recCNT, datumList, KafkaAnalyzer.typecnt);
 					 * r.start(); KafkaAnalyzer.mutex.acquire();
 					 * System.out.println("Cleaning " + recCNT);
@@ -2141,9 +2141,9 @@ public class KafkaAnalyzer {
 						System.out.printf("Takes: " + (System.nanoTime() - startTime) / 1000000000
 								+ "(s) to process: %.1f records...\n", recCNT);
 						if (multithread) {
-							ProcessDatum17 r;
+							ProcessDatum18 r;
 							try {
-								r = new ProcessDatum17(latch, "Thread:" + recCNT, datumList, KafkaAnalyzer.typecnt);
+								r = new ProcessDatum18(latch, "Thread:" + recCNT, datumList, KafkaAnalyzer.typecnt);
 								// service.submit(r);
 								r.start();
 								// Thread.sleep(10000);
@@ -2181,11 +2181,11 @@ public class KafkaAnalyzer {
 
 				if (multithread) {
 					if (!datumList.isEmpty()) {
-						ProcessDatum17 r;
+						ProcessDatum18 r;
 						try {
-							r = new ProcessDatum17(latch, "Thread:" + recCNT, datumList, KafkaAnalyzer.typecnt);
+							r = new ProcessDatum18(latch, "Thread:" + recCNT, datumList, KafkaAnalyzer.typecnt);
 							// service.submit(r);
-							// r = new ProcessDatum17("Thread" + recCNT,
+							// r = new ProcessDatum18("Thread" + recCNT,
 							// datumList,
 							// KafkaAnalyzer.typecnt);
 							r.start();
