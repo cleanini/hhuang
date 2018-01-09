@@ -43,7 +43,7 @@ public class Main {
 		} else {
 			// analyzer.start();
 			multiT = "s";
-			int testbasicOps = 8;
+			int testbasicOps = 9;
 			uuidpath = "/Users/hhuang/Documents/suspUUID.txt";
 			
 			if (testbasicOps == 0)				
@@ -81,7 +81,12 @@ public class Main {
 				analyzer.startFromAvroFile("/data/trace-avro/ta1-trace-cdm17-benign-0424.bin", multiT, uuidpath, dump, policyFile);
 				//analyzer.startFromAvroFile("/Users/hhuang/Downloads/ta1-clearscope-pandex-cdm17.bin.5", multiT, uuidpath);				
 				//analyzer.startFromAvroFile("/Users/hhuang/Downloads/ta1-clearscope-pandex-cdm17.bin.6", multiT, uuidpath);				
+			} else if (testbasicOps == 9) {
+				analyzer.startFromAvroFile("/Users/hhuang/Downloads/boot-and-firefox-2018-01-05/boot-and-firefox.cdm", multiT, uuidpath, dump, policyFile);
+								
 			} 
+			
+			
 			
 			
 		}
