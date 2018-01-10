@@ -46,6 +46,10 @@ def main():
     parser.add_argument('--seq_length', type=int, default=25,
                         help='RNN sequence length')
 
+    parser.add_argument('--arg_1', type=str, default='Unknown')
+    parser.add_argument('--arg_2', type=str, default='Unknown')
+
+
     args = parser.parse_args()
     test(args)
 
@@ -78,6 +82,8 @@ def test(args):
     data_loader = TextLoader(args.data_dir, onlyfiles, 1, 50, args.cid_num)    
     data_loader.reset_batch_pointer()
 
+    arg1 = args.arg_1
+    arg2 = args.arg_2
 
     model = Model(saved_args, False)
     with tf.Session() as sess:
@@ -110,7 +116,13 @@ def test(args):
                     if  count > 3 and not data_loader.event_vocab_rev.get(e) in predicated_list:
                         #print ("observed:" + data_loader.event_vocab_rev.get(e))# + ' ' + data_loader.para_vocab_rev.get(p1) + ' ' + data_loader.para_vocab_rev.get(p2))
                         #print (e) 
-                        print ("observed:" + data_loader.event_vocab_rev.get(e))
+                        eventStr = data_loader.event_vocab_rev.get(e)
+                        if 'FORK' in eventStr:
+                            print ("observed:" + eventStr + ' ' + args.arg_1)
+
+                        if ("none" not in args.arg_2) and 'FORK' not in eventStr and 'SEPARATE' not in eventStr:
+                            print ("observed:" + data_loader.event_vocab_rev.get(e) + ' ' + args.arg_2)
+
                         print (predicated_list)
                     
 
