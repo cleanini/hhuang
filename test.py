@@ -113,7 +113,7 @@ def test(args):
                     count += 1
 
                     suspiciousRank = args.susp_rank
-                    if  count > 3 and not data_loader.event_vocab_rev.get(e) in predicated_list:
+                    if  count > 5 and not data_loader.event_vocab_rev.get(e) in predicated_list:
                         #print ("observed:" + data_loader.event_vocab_rev.get(e))# + ' ' + data_loader.para_vocab_rev.get(p1) + ' ' + data_loader.para_vocab_rev.get(p2))
                         #print (e) 
                         eventStr = data_loader.event_vocab_rev.get(e)
