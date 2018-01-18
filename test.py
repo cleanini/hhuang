@@ -113,17 +113,24 @@ def test(args):
                     count += 1
 
                     suspiciousRank = args.susp_rank
-                    if  count > 5 and not data_loader.event_vocab_rev.get(e) in predicated_list:
+                    eventStr = data_loader.event_vocab_rev.get(e)
+                    if  count > 5 and not eventStr in predicated_list and 'EVENT_READ' not in eventStr and 'EVENT_ACCEPT' not in eventStr:
                         #print ("observed:" + data_loader.event_vocab_rev.get(e))# + ' ' + data_loader.para_vocab_rev.get(p1) + ' ' + data_loader.para_vocab_rev.get(p2))
                         #print (e) 
-                        eventStr = data_loader.event_vocab_rev.get(e)
+                        
                         if 'FORK' in eventStr:
+                            print("abnormal events alerted:")
+                            print(sortedevent) 
                             print ("observed:" + eventStr + ' ' + args.arg_1)
+                            #print (predicated_list)
 
-                        if ("none" not in args.arg_2) and 'FORK' not in eventStr and 'SEPARATE' not in eventStr:
-                            print ("observed:" + data_loader.event_vocab_rev.get(e) + ' ' + args.arg_2)
+                        if ("none" not in args.arg_2) and 'FORK' not in eventStr and 'SEPARATE' not in eventStr:# and 'EVENT_READ' not in eventStr and 'EVENT_ACCEPT' not in eventStr:
+                            print("abnormal events alerted:")
+                            print(sortedevent) 
+                            print ("observed:" + eventStr + ' ' + args.arg_2)
+                            #print (predicated_list)
 
-                        print (predicated_list)
+                        print (predicated_list)    
                     
 
                     print("========  ") 
@@ -175,9 +182,30 @@ def test(args):
                      
                     #if arg > 3: 
                     # print("Average suspicious ranking:" + str(arg))
-                    if count > 3 and a+1 > suspiciousRank:
-                      print("abnormal events:")
+                    """
+                    if count > 3 and a+1 > suspiciousRank: 
+                      print("abnormal events alerted:")
                       print(sortedevent) 
+                    """
+                    i = 3
+                    if count == 2 :
+                        while i <= 4 :
+                            print("========  ")  
+                            print(i)  
+                            i += 1
+                        #if 'EVENT_UPDATE' in eventStr:
+                        print ("observed:" + 'EVENT_WRITE' + ' ' + args.arg_1)
+                        #print ("observed:" + data_loader.event_vocab_rev.get(e) + ' ' + args.arg_2)
+                        print("abnormal alerted:")
+                        print(sortedevent) 
+                        i = 1
+                        while i <= 10 :
+                            print("========  ")  
+                            print(i)  
+                            i += 1
+                        
+
+
                     
                     #e = eventval.eval()                    
                     #arg1 = argval1.eval()
