@@ -4,5 +4,5 @@ python test.py --data_dir /data/result/09-29-17-01-31 --save_dir /data/result/09
 #>> $1model-$2.txt
 #cat $1model-$2.txt
 echo "Finished testing...."
-echo "18773 event processed from one trace"
+#echo "39076 event processed from one trace"
 #sublime $1model-$2.txt
